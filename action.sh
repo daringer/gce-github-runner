@@ -163,12 +163,12 @@ function start_vm {
 
   if $actions_preinstalled ; then
     echo "✅ Startup script won't install GitHub Actions (pre-installed)"
-    startup_script="#!/bin/bash
+    startup_script="#!/usr/bin/bash
     cd /actions-runner
     $startup_script"
   else
     echo "✅ Startup script will install GitHub Actions"
-    startup_script="#!/bin/bash
+    startup_script="#!/usr/bin/bash
     mkdir /actions-runner
     cd /actions-runner
     curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
@@ -192,7 +192,7 @@ function start_vm {
     && echo "label=${VM_ID}" >> $GITHUB_OUTPUT
 
   safety_off
-  while (( i++ < 24 )); do
+  while (( i++ < 100 )); do
     GH_READY=$(gcloud compute instances describe ${VM_ID} --zone=${machine_zone} --format='json(labels)' | jq -r .labels.gh_ready)
     if [[ $GH_READY == 1 ]]; then
       break
